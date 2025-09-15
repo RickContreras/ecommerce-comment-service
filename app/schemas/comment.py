@@ -3,27 +3,26 @@ from typing import Optional
 from datetime import datetime
 import uuid
 
-class CommentBase(BaseModel):
-    content: str = Field(..., min_length=1, max_length=2000)
-    rating: Optional[int] = Field(None, ge=1, le=5)
-    product_id: uuid.UUID = Field(..., description="ID del producto comentado")
-    user_id: uuid.UUID = Field(..., description="ID del usuario que comenta")
-    author_name: Optional[str] = Field(None, max_length=255)
+class ReviewBase(BaseModel):
+    product_id: uuid.UUID = Field(..., description="ID del producto reseñado")
+    user_id: uuid.UUID = Field(..., description="ID del usuario que hace la reseña")
+    reviewer_name: Optional[str] = Field(None, description="Nombre del reseñador")
+    rating: int = Field(..., ge=1, le=5, description="Calificación de 1 a 5 estrellas")
+    comment: str = Field(..., min_length=1, max_length=2000, description="Texto del comentario")
     
     @validator('rating')
     def validate_rating(cls, v):
-        if v is not None and (v < 1 or v > 5):
+        if v < 1 or v > 5:
             raise ValueError('El rating debe estar entre 1 y 5')
         return v
 
-class CommentCreate(CommentBase):
+class ReviewCreate(ReviewBase):
     pass
 
-class CommentUpdate(BaseModel):
-    content: Optional[str] = Field(None, min_length=1, max_length=2000)
-    rating: Optional[int] = Field(None, ge=1, le=5)
-    author_name: Optional[str] = Field(None, max_length=255)
-    is_active: Optional[bool] = Field(None)
+class ReviewUpdate(BaseModel):
+    reviewer_name: Optional[str] = Field(None, description="Nombre del reseñador")
+    rating: Optional[int] = Field(None, ge=1, le=5, description="Calificación de 1 a 5 estrellas")
+    comment: Optional[str] = Field(None, min_length=1, max_length=2000, description="Texto del comentario")
     
     @validator('rating')
     def validate_rating(cls, v):
@@ -31,23 +30,26 @@ class CommentUpdate(BaseModel):
             raise ValueError('El rating debe estar entre 1 y 5')
         return v
 
-class CommentInDB(CommentBase):
+class ReviewInDB(ReviewBase):
     id: uuid.UUID
-    is_verified: bool
-    is_active: bool
     created_at: datetime
-    updated_at: Optional[datetime]
     
     class Config:
         from_attributes = True
 
-class CommentSchema(CommentInDB):
+class ReviewSchema(ReviewInDB):
     pass
 
 # Schema para filtros de búsqueda
-class CommentFilter(BaseModel):
+class ReviewFilter(BaseModel):
     product_id: Optional[uuid.UUID] = None
     user_id: Optional[uuid.UUID] = None
     rating: Optional[int] = Field(None, ge=1, le=5)
-    is_verified: Optional[bool] = None
-    is_active: Optional[bool] = True
+
+# Mantener alias para compatibilidad
+CommentBase = ReviewBase
+CommentCreate = ReviewCreate
+CommentUpdate = ReviewUpdate
+CommentInDB = ReviewInDB
+CommentSchema = ReviewSchema
+CommentFilter = ReviewFilter

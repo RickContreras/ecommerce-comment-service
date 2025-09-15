@@ -19,7 +19,7 @@ class CommentService:
     def get_comment(self, comment_id: uuid.UUID) -> Optional[Comment]:
         """Obtener un comentario por ID"""
         comment = self.comment_crud.get(self.db, comment_id)
-        if not comment or not comment.is_active:
+        if not comment:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Comentario no encontrado"
@@ -78,6 +78,8 @@ class CommentService:
         }
     
     def verify_comment(self, comment_id: uuid.UUID) -> Comment:
-        """Marcar un comentario como verificado"""
-        comment_update = CommentUpdate(is_verified=True)
-        return self.update_comment(comment_id, comment_update)
+        """Marcar un comentario como verificado - NO IMPLEMENTADO en modelo actual"""
+        raise HTTPException(
+            status_code=status.HTTP_501_NOT_IMPLEMENTED,
+            detail="Función de verificación no disponible en el modelo actual"
+        )

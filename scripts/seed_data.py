@@ -16,213 +16,198 @@ from sqlalchemy import func
 from app.db.session import SessionLocal
 from app.models.comment import Comment
 
-def create_sample_comments():
-    """Crear comentarios de ejemplo en la base de datos"""
-    
-    # IDs de productos reales del microservicio de productos
+def seed_comments():
+    """Seed the database with sample comments."""
+    # Sample product UUIDs - estos deberían corresponder a productos reales en tu base de datos de productos
     sample_product_ids = [
-        uuid.UUID("88d7984b-a03c-413c-960f-6bf99ef23291"),  # iPhone 15 Pro Max
-        uuid.UUID("e377c7c7-fada-47c1-8607-c2a0b8e1375c"),  # MacBook Pro 14" M3
-        uuid.UUID("2c45bd8c-87e5-42eb-b133-5f0fd8d7dd59"),  # AirPods Pro (3ª generación)
-        uuid.UUID("0800be13-ba6f-4f1f-be05-d253bd756aa0"),  # Samsung Galaxy S24 Ultra
-        uuid.UUID("c6dc5567-ecfa-4fbe-b2fb-c7399637f4fa"),  # Sony WH-1000XM5
-        uuid.UUID("4dd6a4c5-44f2-8fa8-9a67-af2e6b6bc6cf"),  # Dell XPS 13 Plus
-        uuid.UUID("e5a831b7-5b1b-480e-bac0-314703a572c5"),  # iPad Pro 12.9" M2
-        uuid.UUID("b91a5b71-a435-4c90-9c88-884228bd4c50"),  # Nintendo Switch OLED
-        uuid.UUID("14614427-6201-444a-af22-0fa0b4ad0ae0"),  # Apple Watch Series 9
-        uuid.UUID("daeee192-320c-4c27-8c8c-5712eb706011"),  # Canon EOS R6 Mark II
+        uuid.UUID("01234567-89ab-cdef-0123-456789abcdef"),  # iPhone 15 Pro Max
+        uuid.UUID("11234567-89ab-cdef-0123-456789abcdef"),  # MacBook Pro 14" M3
+        uuid.UUID("21234567-89ab-cdef-0123-456789abcdef"),  # AirPods Pro (3ª generación)
+        uuid.UUID("31234567-89ab-cdef-0123-456789abcdef"),  # Samsung Galaxy S24 Ultra
+        uuid.UUID("41234567-89ab-cdef-0123-456789abcdef"),  # Sony WH-1000XM5
+        uuid.UUID("51234567-89ab-cdef-0123-456789abcdef"),  # Dell XPS 13 Plus
+        uuid.UUID("61234567-89ab-cdef-0123-456789abcdef"),  # iPad Pro 12.9" M2
+        uuid.UUID("71234567-89ab-cdef-0123-456789abcdef"),  # Nintendo Switch OLED
+        uuid.UUID("81234567-89ab-cdef-0123-456789abcdef"),  # Apple Watch Series 9
+        uuid.UUID("91234567-89ab-cdef-0123-456789abcdef"),  # Canon EOS R6 Mark II
     ]
     
-    # IDs de usuarios de ejemplo
+    # Sample user UUIDs - estos deberían corresponder a usuarios reales en tu base de datos de usuarios
     sample_user_ids = [
-        uuid.UUID("650e8400-e29b-41d4-a716-446655440000"),
-        uuid.UUID("650e8400-e29b-41d4-a716-446655440001"),
-        uuid.UUID("650e8400-e29b-41d4-a716-446655440002"),
-        uuid.UUID("650e8400-e29b-41d4-a716-446655440003"),
-        uuid.UUID("650e8400-e29b-41d4-a716-446655440004"),
-        uuid.UUID("650e8400-e29b-41d4-a716-446655440005"),
-        uuid.UUID("650e8400-e29b-41d4-a716-446655440006"),
-        uuid.UUID("650e8400-e29b-41d4-a716-446655440007"),
-        uuid.UUID("650e8400-e29b-41d4-a716-446655440008"),
-        uuid.UUID("650e8400-e29b-41d4-a716-446655440009"),
+        uuid.UUID("a0234567-89ab-cdef-0123-456789abcdef"),  # María González
+        uuid.UUID("a1234567-89ab-cdef-0123-456789abcdef"),  # Carlos Rodríguez
+        uuid.UUID("a2234567-89ab-cdef-0123-456789abcdef"),  # Ana López
+        uuid.UUID("a3234567-89ab-cdef-0123-456789abcdef"),  # David Martín
+        uuid.UUID("a4234567-89ab-cdef-0123-456789abcdef"),  # Laura Fernández
+        uuid.UUID("a5234567-89ab-cdef-0123-456789abcdef"),  # Roberto Sánchez
     ]
     
     comments_data = [
         # Comentarios para iPhone 15 Pro Max
         {
-            "content": "Excelente teléfono, la cámara es increíble y la batería dura todo el día. Muy recomendado.",
+            "comment": "Excelente teléfono, la cámara es increíble y la batería dura todo el día. Muy recomendado.",
             "rating": 5,
             "product_id": sample_product_ids[0],
             "user_id": sample_user_ids[0],
-            "author_name": "María González",
-            "is_verified": True
+            "reviewer_name": "María González"
         },
         {
-            "content": "Buena calidad pero muy caro. La transición desde Android fue más difícil de lo esperado.",
+            "comment": "Buena calidad pero muy caro. La transición desde Android fue más difícil de lo esperado.",
             "rating": 4,
             "product_id": sample_product_ids[0],
             "user_id": sample_user_ids[1],
-            "author_name": "Carlos Rodríguez",
-            "is_verified": True
+            "reviewer_name": "Carlos Rodríguez"
         },
         {
-            "content": "El mejor iPhone hasta ahora. El titanio se siente premium y el rendimiento es sobresaliente.",
+            "comment": "El mejor iPhone hasta ahora. El titanio se siente premium y el rendimiento es sobresaliente.",
             "rating": 5,
             "product_id": sample_product_ids[0],
             "user_id": sample_user_ids[2],
-            "author_name": "Ana López"
+            "reviewer_name": "Ana López"
         },
         
         # Comentarios para MacBook Pro 14" M3
         {
-            "content": "Perfecto para desarrollo de software. El chip M3 es una bestia y la pantalla es hermosa.",
+            "comment": "Perfecto para desarrollo de software. El chip M3 es una bestia y la pantalla es hermosa.",
             "rating": 5,
             "product_id": sample_product_ids[1],
             "user_id": sample_user_ids[3],
-            "author_name": "David Martín",
-            "is_verified": True
+            "reviewer_name": "David Martín"
         },
         {
-            "content": "Excelente laptop pero se calienta un poco con tareas muy intensivas. Por lo demás, perfecta.",
+            "comment": "Excelente laptop pero se calienta un poco con tareas muy intensivas. Por lo demás, perfecta.",
             "rating": 4,
             "product_id": sample_product_ids[1],
             "user_id": sample_user_ids[4],
-            "author_name": "Laura Fernández"
+            "reviewer_name": "Laura Fernández"
         },
         
         # Comentarios para AirPods Pro (3ª generación)
         {
-            "content": "La cancelación de ruido es impresionante. Perfectos para viajar y trabajar.",
+            "comment": "La cancelación de ruido es impresionante. Perfectos para viajar y trabajar.",
             "rating": 5,
             "product_id": sample_product_ids[2],
             "user_id": sample_user_ids[5],
-            "author_name": "Roberto Sánchez",
-            "is_verified": True
+            "reviewer_name": "Roberto Sánchez"
         },
         {
-            "content": "Buenos audífonos pero se me han caído varias veces. El estuche es un poco resbaladizo.",
+            "comment": "Buenos audífonos pero se me han caído varias veces. El estuche es un poco resbaladizo.",
             "rating": 3,
             "product_id": sample_product_ids[2],
             "user_id": sample_user_ids[0],
-            "author_name": "Patricia Ruiz"
+            "reviewer_name": "Patricia Ruiz"
         },
         
         # Comentarios para Samsung Galaxy S24 Ultra
         {
-            "content": "El S Pen es muy útil para tomar notas. La pantalla es vibrante y fluida.",
+            "comment": "El S Pen es muy útil para tomar notas. La pantalla es vibrante y fluida.",
             "rating": 4,
             "product_id": sample_product_ids[3],
             "user_id": sample_user_ids[1],
-            "author_name": "Miguel Torres",
-            "is_verified": True
+            "reviewer_name": "Miguel Torres"
         },
         {
-            "content": "Buena alternativa al iPhone. El sistema de cámaras es muy versátil.",
+            "comment": "Buena alternativa al iPhone. El sistema de cámaras es muy versátil.",
             "rating": 4,
             "product_id": sample_product_ids[3],
             "user_id": sample_user_ids[2],
-            "author_name": "Elena Morales"
+            "reviewer_name": "Elena Morales"
         },
         
         # Comentarios para Sony WH-1000XM5
         {
-            "content": "Los mejores audífonos over-ear que he probado. La cancelación de ruido es excepcional.",
+            "comment": "Los mejores audífonos over-ear que he probado. La cancelación de ruido es excepcional.",
             "rating": 5,
             "product_id": sample_product_ids[4],
             "user_id": sample_user_ids[3],
-            "author_name": "Alejandro Vega",
-            "is_verified": True
+            "reviewer_name": "Alejandro Vega"
         },
         {
-            "content": "Excelente calidad de sonido pero un poco pesados para uso prolongado.",
+            "comment": "Excelente calidad de sonido pero un poco pesados para uso prolongado.",
             "rating": 4,
             "product_id": sample_product_ids[4],
             "user_id": sample_user_ids[4],
-            "author_name": "Sandra Jiménez"
+            "reviewer_name": "Sandra Jiménez"
         },
         
         # Comentarios para Dell XPS 13 Plus
         {
-            "content": "Laptop ultra delgada con excelente rendimiento. Perfecta para viajes de trabajo.",
+            "comment": "Laptop ultra delgada con excelente rendimiento. Perfecta para viajes de trabajo.",
             "rating": 5,
             "product_id": sample_product_ids[5],
             "user_id": sample_user_ids[5],
-            "author_name": "Fernando Castro"
+            "reviewer_name": "Fernando Castro"
         },
         {
-            "content": "Buena laptop pero la batería podría durar más. El teclado se siente premium.",
+            "comment": "Buena laptop pero la batería podría durar más. El teclado se siente premium.",
             "rating": 3,
             "product_id": sample_product_ids[5],
             "user_id": sample_user_ids[0],
-            "author_name": "Carmen Ruiz"
+            "reviewer_name": "Carmen Ruiz"
         },
         
         # Comentarios para iPad Pro 12.9" M2
         {
-            "content": "Increíble para diseño gráfico y edición de video. La pantalla es espectacular.",
+            "comment": "Increíble para diseño gráfico y edición de video. La pantalla es espectacular.",
             "rating": 5,
             "product_id": sample_product_ids[6],
             "user_id": sample_user_ids[1],
-            "author_name": "Jorge Mendoza",
-            "is_verified": True
+            "reviewer_name": "Jorge Mendoza"
         },
         {
-            "content": "Muy buena tablet pero el precio es bastante alto para lo que ofrece.",
+            "comment": "Muy buena tablet pero el precio es bastante alto para lo que ofrece.",
             "rating": 4,
             "product_id": sample_product_ids[6],
             "user_id": sample_user_ids[2],
-            "author_name": "Lucía Herrera"
+            "reviewer_name": "Lucía Herrera"
         },
         
         # Comentarios para Nintendo Switch OLED
         {
-            "content": "La pantalla OLED se ve hermosa. Perfecto para jugar tanto en casa como en viajes.",
+            "comment": "La pantalla OLED se ve hermosa. Perfecto para jugar tanto en casa como en viajes.",
             "rating": 5,
             "product_id": sample_product_ids[7],
             "user_id": sample_user_ids[3],
-            "author_name": "Ricardo Vargas",
-            "is_verified": True
+            "reviewer_name": "Ricardo Vargas"
         },
         {
-            "content": "Buenos juegos pero la consola se siente un poco frágil. Hay que cuidarla mucho.",
+            "comment": "Buenos juegos pero la consola se siente un poco frágil. Hay que cuidarla mucho.",
             "rating": 3,
             "product_id": sample_product_ids[7],
             "user_id": sample_user_ids[4],
-            "author_name": "Andrea Silva"
+            "reviewer_name": "Andrea Silva"
         },
         
         # Comentarios para Apple Watch Series 9
         {
-            "content": "Excelente para fitness y notificaciones. La batería dura todo el día sin problemas.",
+            "comment": "Excelente para fitness y notificaciones. La batería dura todo el día sin problemas.",
             "rating": 5,
             "product_id": sample_product_ids[8],
             "user_id": sample_user_ids[5],
-            "author_name": "Manuel Ortiz",
-            "is_verified": True
+            "reviewer_name": "Manuel Ortiz"
         },
         {
-            "content": "Bueno pero esperaba más funciones para el precio que tiene. Es muy básico.",
+            "comment": "Bueno pero esperaba más funciones para el precio que tiene. Es muy básico.",
             "rating": 3,
             "product_id": sample_product_ids[8],
             "user_id": sample_user_ids[0],
-            "author_name": "Valentina Cruz"
+            "reviewer_name": "Valentina Cruz"
         },
         
         # Comentarios para Canon EOS R6 Mark II
         {
-            "content": "Cámara profesional increíble. Las fotos salen con una calidad impresionante.",
+            "comment": "Cámara profesional increíble. Las fotos salen con una calidad impresionante.",
             "rating": 5,
             "product_id": sample_product_ids[9],
             "user_id": sample_user_ids[1],
-            "author_name": "Sebastián Torres",
-            "is_verified": True
+            "reviewer_name": "Sebastián Torres"
         },
         {
-            "content": "Excelente cámara pero muy cara. Solo recomendable para fotógrafos profesionales.",
+            "comment": "Excelente cámara pero muy cara. Solo recomendable para fotógrafos profesionales.",
             "rating": 4,
             "product_id": sample_product_ids[9],
             "user_id": sample_user_ids[2],
-            "author_name": "Isabella Rojas"
+            "reviewer_name": "Isabella Rojas"
         }
     ]
     
@@ -235,13 +220,13 @@ def seed_comments_data():
         # Verificar si ya existen comentarios
         existing_comments = db.query(Comment).first()
         if existing_comments:
-            print("❌ Ya existen comentarios en la base de datos. Saltando la creación de datos de ejemplo.")
+            print("❌ Ya existen reseñas en la base de datos. Saltando la creación de datos de ejemplo.")
             return
         
-        print("🌱 Creando comentarios de ejemplo...")
+        print("🌱 Creando reseñas de ejemplo...")
         
         # Crear comentarios
-        comments_data = create_sample_comments()
+        comments_data = seed_comments()
         created_count = 0
         
         for comment_data in comments_data:
@@ -251,24 +236,21 @@ def seed_comments_data():
             
             comment = Comment(
                 **comment_data,
-                created_at=created_at,
-                updated_at=created_at
+                created_at=created_at
             )
             
             db.add(comment)
             created_count += 1
         
         db.commit()
-        print(f"✅ Se crearon {created_count} comentarios de ejemplo exitosamente.")
+        print(f"✅ Se crearon {created_count} reseñas de ejemplo exitosamente.")
         
         # Mostrar estadísticas
         total_comments = db.query(Comment).count()
-        verified_comments = db.query(Comment).filter(Comment.is_verified == True).count()
         avg_rating = db.query(func.avg(Comment.rating)).scalar()
         
         print(f"\n📊 Estadísticas de la base de datos:")
-        print(f"   • Total de comentarios: {total_comments}")
-        print(f"   • Comentarios verificados: {verified_comments}")
+        print(f"   • Total de reseñas: {total_comments}")
         print(f"   • Calificación promedio: {avg_rating:.2f}/5.0" if avg_rating else "   • Calificación promedio: N/A")
         
     except Exception as e:
@@ -279,6 +261,6 @@ def seed_comments_data():
         db.close()
 
 if __name__ == "__main__":
-    print("🚀 Iniciando creación de datos de ejemplo para el servicio de comentarios...")
+    print("🚀 Iniciando creación de datos de ejemplo para el servicio de reseñas...")
     seed_comments_data()
     print("🎉 Proceso completado.")

@@ -55,8 +55,6 @@ def search_comments(
     product_id: Optional[uuid.UUID] = Query(None),
     user_id: Optional[uuid.UUID] = Query(None),
     rating: Optional[int] = Query(None, ge=1, le=5),
-    is_verified: Optional[bool] = Query(None),
-    is_active: Optional[bool] = Query(True),
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=1000),
     db: Session = Depends(get_db)
@@ -65,9 +63,7 @@ def search_comments(
     filters = CommentFilter(
         product_id=product_id,
         user_id=user_id,
-        rating=rating,
-        is_verified=is_verified,
-        is_active=is_active
+        rating=rating
     )
     service = CommentService(db)
     return service.search_comments(filters, skip, limit)

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
-from app.api.v1.endpoints.comments import router as comment_router
+from app.api.v1.api import api_router
 
 app = FastAPI(
     title="Ecommerce Comment Service",
@@ -20,7 +20,7 @@ app.add_middleware(
 )
 
 # Include routers
-app.include_router(comment_router, prefix="/api/v1")
+app.include_router(api_router, prefix="/api/v1")
 
 @app.get("/")
 def read_root():

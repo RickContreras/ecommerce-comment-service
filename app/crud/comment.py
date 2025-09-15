@@ -1,5 +1,4 @@
 from sqlalchemy.orm import Session
-from sqlalchemy import and_
 from app.models.comment import Comment
 from app.schemas.comment import CommentCreate, CommentUpdate, CommentFilter
 from typing import List, Optional
@@ -17,17 +16,13 @@ class CommentCRUD:
         return db.query(Comment).filter(Comment.id == comment_id).first()
     
     def get_all(self, db: Session, skip: int = 0, limit: int = 100) -> List[Comment]:
-        return db.query(Comment).filter(Comment.is_active == True).offset(skip).limit(limit).all()
+        return db.query(Comment).offset(skip).limit(limit).all()
     
     def get_by_product(self, db: Session, product_id: uuid.UUID, skip: int = 0, limit: int = 100) -> List[Comment]:
-        return db.query(Comment).filter(
-            and_(Comment.product_id == product_id, Comment.is_active == True)
-        ).offset(skip).limit(limit).all()
+        return db.query(Comment).filter(Comment.product_id == product_id).offset(skip).limit(limit).all()
     
     def get_by_user(self, db: Session, user_id: uuid.UUID, skip: int = 0, limit: int = 100) -> List[Comment]:
-        return db.query(Comment).filter(
-            and_(Comment.user_id == user_id, Comment.is_active == True)
-        ).offset(skip).limit(limit).all()
+        return db.query(Comment).filter(Comment.user_id == user_id).offset(skip).limit(limit).all()
     
     def get_with_filters(self, db: Session, filters: CommentFilter, skip: int = 0, limit: int = 100) -> List[Comment]:
         query = db.query(Comment)
@@ -38,10 +33,6 @@ class CommentCRUD:
             query = query.filter(Comment.user_id == filters.user_id)
         if filters.rating:
             query = query.filter(Comment.rating == filters.rating)
-        if filters.is_verified is not None:
-            query = query.filter(Comment.is_verified == filters.is_verified)
-        if filters.is_active is not None:
-            query = query.filter(Comment.is_active == filters.is_active)
             
         return query.offset(skip).limit(limit).all()
     
@@ -58,16 +49,6 @@ class CommentCRUD:
         db.refresh(db_comment)
         return db_comment
     
-    def soft_delete(self, db: Session, comment_id: uuid.UUID) -> bool:
-        """Soft delete - marca el comentario como inactivo"""
-        db_comment = self.get(db, comment_id)
-        if not db_comment:
-            return False
-        
-        db_comment.is_active = False
-        db.commit()
-        return True
-    
     def delete(self, db: Session, comment_id: uuid.UUID) -> bool:
         """Hard delete - elimina permanentemente el comentario"""
         db_comment = self.get(db, comment_id)
@@ -78,20 +59,18 @@ class CommentCRUD:
         db.commit()
         return True
     
+    def soft_delete(self, db: Session, comment_id: uuid.UUID) -> bool:
+        """Soft delete - como no tenemos campo is_active, implementamos como hard delete"""
+        return self.delete(db, comment_id)
+    
     def get_average_rating(self, db: Session, product_id: uuid.UUID) -> Optional[float]:
         """Obtiene el rating promedio de un producto"""
         from sqlalchemy import func
         result = db.query(func.avg(Comment.rating)).filter(
-            and_(
-                Comment.product_id == product_id,
-                Comment.rating.isnot(None),
-                Comment.is_active == True
-            )
+            Comment.product_id == product_id
         ).scalar()
         return float(result) if result else None
     
     def get_comment_count(self, db: Session, product_id: uuid.UUID) -> int:
         """Obtiene el número total de comentarios de un producto"""
-        return db.query(Comment).filter(
-            and_(Comment.product_id == product_id, Comment.is_active == True)
-        ).count()
+        return db.query(Comment).filter(Comment.product_id == product_id).count()
