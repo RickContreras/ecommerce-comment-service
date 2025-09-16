@@ -18,18 +18,18 @@ from app.models.comment import Comment
 
 def seed_comments():
     """Seed the database with sample comments."""
-    # Sample product UUIDs - estos deberían corresponder a productos reales en tu base de datos de productos
+    # IDs reales de productos de la base de datos
     sample_product_ids = [
-        uuid.UUID("01234567-89ab-cdef-0123-456789abcdef"),  # iPhone 15 Pro Max
-        uuid.UUID("11234567-89ab-cdef-0123-456789abcdef"),  # MacBook Pro 14" M3
-        uuid.UUID("21234567-89ab-cdef-0123-456789abcdef"),  # AirPods Pro (3ª generación)
-        uuid.UUID("31234567-89ab-cdef-0123-456789abcdef"),  # Samsung Galaxy S24 Ultra
-        uuid.UUID("41234567-89ab-cdef-0123-456789abcdef"),  # Sony WH-1000XM5
-        uuid.UUID("51234567-89ab-cdef-0123-456789abcdef"),  # Dell XPS 13 Plus
-        uuid.UUID("61234567-89ab-cdef-0123-456789abcdef"),  # iPad Pro 12.9" M2
-        uuid.UUID("71234567-89ab-cdef-0123-456789abcdef"),  # Nintendo Switch OLED
-        uuid.UUID("81234567-89ab-cdef-0123-456789abcdef"),  # Apple Watch Series 9
-        uuid.UUID("91234567-89ab-cdef-0123-456789abcdef"),  # Canon EOS R6 Mark II
+        uuid.UUID("88d7894b-a03c-413c-960f-6bf09ef23291"),  # iPhone 15 Pro Max
+        uuid.UUID("63776d05-78e5-4607-c2a0-bbef1968d1f3"),  # MacBook Pro 14" M3
+        uuid.UUID("2c45bd8c-87e5-42eb-b133-5f0fd8d7dd59"),  # AirPods Pro (3ª generación)
+        uuid.UUID("0800be13-ba6f-4f1f-be05-4253bd756aa0"),  # Samsung Galaxy S24 Ultra
+        uuid.UUID("e6de3a67-ecfa-4fbe-b2fb-c79380378dfa"),  # Sony WH-1000XM5
+        uuid.UUID("fddf6239-9984-47d8-a9a6-f093e7b0b83f"),  # Dell XPS 13 Plus
+        uuid.UUID("c5a831b7-5b1b-480e-bac0-314703a572c5"),  # iPad Pro 12.9" M2
+        uuid.UUID("b91a5b71-a435-4c90-9c88-584228bd4c50"),  # Nintendo Switch OLED
+        uuid.UUID("14614427-6201-444a-af22-0fa0b4a60aa0"),  # Apple Watch Series 9
+        uuid.UUID("daee6192-3206-4c27-8696-57f2eb706011"),  # Canon EOS R6 Mark II
     ]
     
     # Sample user UUIDs - estos deberían corresponder a usuarios reales en tu base de datos de usuarios

@@ -60,8 +60,8 @@ def main():
     print("🌱 Poblando la base de datos con comentarios de ejemplo...")
     try:
         # Importar y ejecutar el script de semillas
-        from scripts.seed_data import main as seed_main
-        seed_main()
+        from scripts.seed_data import seed_comments_data
+        seed_comments_data()
         print("✅ Base de datos poblada exitosamente")
     except Exception as e:
         print(f"❌ Error poblando la base de datos: {e}")
