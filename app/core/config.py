@@ -23,9 +23,9 @@ class Settings(BaseSettings):
     environment: str = "development"
     debug: bool = True
     
-    # CORS and security
-    allowed_hosts: str = "localhost,127.0.0.1"
-    cors_origins: str = "http://localhost:3000,http://localhost:8080"
+    # CORS and security - Configuración abierta para permitir acceso desde cualquier origen
+    allowed_hosts: str = "*"  # Permite cualquier host
+    cors_origins: str = "*"   # Permite cualquier origen
     
     @property
     def allowed_hosts_list(self) -> List[str]:

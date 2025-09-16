@@ -10,13 +10,13 @@ app = FastAPI(
     debug=settings.debug
 )
 
-# CORS middleware
+# CORS middleware - Permite solicitudes desde cualquier origen
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # En producción, especifica dominios específicos
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=["*"],  # Permite solicitudes desde cualquier dominio
+    allow_credentials=False,  # Deshabilitado para compatibilidad con allow_origins=["*"]
+    allow_methods=["*"],  # Permite todos los métodos HTTP (GET, POST, PUT, DELETE, etc.)
+    allow_headers=["*"],  # Permite todos los headers
 )
 
 # Include routers

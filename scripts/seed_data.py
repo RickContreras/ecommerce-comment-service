@@ -18,18 +18,15 @@ from app.models.comment import Comment
 
 def seed_comments():
     """Seed the database with sample comments."""
-    # IDs reales de productos de la base de datos
+    # Sample product UUIDs - IDs reales de productos actualizados
     sample_product_ids = [
-        uuid.UUID("88d7894b-a03c-413c-960f-6bf09ef23291"),  # iPhone 15 Pro Max
-        uuid.UUID("63776d05-78e5-4607-c2a0-bbef1968d1f3"),  # MacBook Pro 14" M3
-        uuid.UUID("2c45bd8c-87e5-42eb-b133-5f0fd8d7dd59"),  # AirPods Pro (3ª generación)
-        uuid.UUID("0800be13-ba6f-4f1f-be05-4253bd756aa0"),  # Samsung Galaxy S24 Ultra
-        uuid.UUID("e6de3a67-ecfa-4fbe-b2fb-c79380378dfa"),  # Sony WH-1000XM5
-        uuid.UUID("fddf6239-9984-47d8-a9a6-f093e7b0b83f"),  # Dell XPS 13 Plus
-        uuid.UUID("c5a831b7-5b1b-480e-bac0-314703a572c5"),  # iPad Pro 12.9" M2
-        uuid.UUID("b91a5b71-a435-4c90-9c88-584228bd4c50"),  # Nintendo Switch OLED
-        uuid.UUID("14614427-6201-444a-af22-0fa0b4a60aa0"),  # Apple Watch Series 9
-        uuid.UUID("daee6192-3206-4c27-8696-57f2eb706011"),  # Canon EOS R6 Mark II
+        uuid.UUID("f438b2e8-54c4-47f4-b9c4-ba9ce7bbe5cf"),  # iPhone 15 Pro Max
+        uuid.UUID("641d925d-ab4e-4380-9140-76381aecab95"),  # MacBook Pro 14" M3
+        uuid.UUID("2c54705e-998b-473f-b96f-c6620bfbccdb"),  # AirPods Pro (3ª generación)
+        uuid.UUID("1f0ae883-d3d1-4b0b-ad0c-61b9dd6ec0e0"),  # Samsung Galaxy S24 Ultra
+        uuid.UUID("964e8b17-7576-4d36-975e-91dae13beb79"),  # Sony WH-1000XM5
+        uuid.UUID("d913db4b-12b8-4605-b3cf-b68c4d319197"),  # Dell XPS 13 Plus
+        uuid.UUID("ec7581bf-d5e5-4945-85b0-9ad169438d45"),  # iPad Pro 12.9" M2
     ]
     
     # Sample user UUIDs - estos deberían corresponder a usuarios reales en tu base de datos de usuarios
@@ -161,54 +158,6 @@ def seed_comments():
             "user_id": sample_user_ids[2],
             "reviewer_name": "Lucía Herrera"
         },
-        
-        # Comentarios para Nintendo Switch OLED
-        {
-            "comment": "La pantalla OLED se ve hermosa. Perfecto para jugar tanto en casa como en viajes.",
-            "rating": 5,
-            "product_id": sample_product_ids[7],
-            "user_id": sample_user_ids[3],
-            "reviewer_name": "Ricardo Vargas"
-        },
-        {
-            "comment": "Buenos juegos pero la consola se siente un poco frágil. Hay que cuidarla mucho.",
-            "rating": 3,
-            "product_id": sample_product_ids[7],
-            "user_id": sample_user_ids[4],
-            "reviewer_name": "Andrea Silva"
-        },
-        
-        # Comentarios para Apple Watch Series 9
-        {
-            "comment": "Excelente para fitness y notificaciones. La batería dura todo el día sin problemas.",
-            "rating": 5,
-            "product_id": sample_product_ids[8],
-            "user_id": sample_user_ids[5],
-            "reviewer_name": "Manuel Ortiz"
-        },
-        {
-            "comment": "Bueno pero esperaba más funciones para el precio que tiene. Es muy básico.",
-            "rating": 3,
-            "product_id": sample_product_ids[8],
-            "user_id": sample_user_ids[0],
-            "reviewer_name": "Valentina Cruz"
-        },
-        
-        # Comentarios para Canon EOS R6 Mark II
-        {
-            "comment": "Cámara profesional increíble. Las fotos salen con una calidad impresionante.",
-            "rating": 5,
-            "product_id": sample_product_ids[9],
-            "user_id": sample_user_ids[1],
-            "reviewer_name": "Sebastián Torres"
-        },
-        {
-            "comment": "Excelente cámara pero muy cara. Solo recomendable para fotógrafos profesionales.",
-            "rating": 4,
-            "product_id": sample_product_ids[9],
-            "user_id": sample_user_ids[2],
-            "reviewer_name": "Isabella Rojas"
-        }
     ]
     
     return comments_data
