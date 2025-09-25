@@ -77,6 +77,16 @@ class CommentService:
             "total_comments": comment_count
         }
     
+    def get_product_sentiment_stats(self, product_id: uuid.UUID) -> dict:
+        """Obtener estadísticas de sentimiento de un producto específico"""
+        stats = self.comment_crud.get_sentiment_stats(self.db, product_id)
+        stats["product_id"] = product_id
+        return stats
+    
+    def get_global_sentiment_stats(self) -> dict:
+        """Obtener estadísticas globales de sentimiento"""
+        return self.comment_crud.get_sentiment_stats(self.db)
+    
     def verify_comment(self, comment_id: uuid.UUID) -> Comment:
         """Marcar un comentario como verificado - NO IMPLEMENTADO en modelo actual"""
         raise HTTPException(

@@ -74,3 +74,42 @@ class CommentCRUD:
     def get_comment_count(self, db: Session, product_id: uuid.UUID) -> int:
         """Obtiene el número total de comentarios de un producto"""
         return db.query(Comment).filter(Comment.product_id == product_id).count()
+    
+    def get_sentiment_stats(self, db: Session, product_id: Optional[uuid.UUID] = None) -> dict:
+        """Obtiene estadísticas de sentimiento para positive/negative únicamente"""
+        from sqlalchemy import func, case
+        
+        query = db.query(Comment)
+        if product_id:
+            query = query.filter(Comment.product_id == product_id)
+        
+        # Contar sentimientos y calcular promedio de confianza
+        sentiment_stats = db.query(
+            func.count(case([(Comment.sentiment_label == 'positive', 1)])).label('positive'),
+            func.count(case([(Comment.sentiment_label == 'negative', 1)])).label('negative'),
+            func.count(case([(Comment.sentiment_label.isnot(None), 1)])).label('total_with_sentiment'),
+            func.count(Comment.id).label('total_comments'),
+            func.avg(case([(Comment.sentiment_score.isnot(None), Comment.sentiment_score)])).label('avg_confidence')
+        )
+        
+        if product_id:
+            sentiment_stats = sentiment_stats.filter(Comment.product_id == product_id)
+        
+        result = sentiment_stats.first()
+        
+        total_comments = result.total_comments if result.total_comments else 0
+        total_with_sentiment = result.total_with_sentiment if result.total_with_sentiment else 0
+        positive = result.positive if result.positive else 0
+        negative = result.negative if result.negative else 0
+        avg_confidence = result.avg_confidence if result.avg_confidence else 0.0
+        
+        return {
+            "total_comments": total_comments,
+            "comments_with_sentiment": total_with_sentiment,
+            "comments_without_sentiment": total_comments - total_with_sentiment,
+            "positive": positive,
+            "negative": negative,
+            "positive_percentage": round((positive / total_with_sentiment) * 100, 2) if total_with_sentiment > 0 else 0,
+            "negative_percentage": round((negative / total_with_sentiment) * 100, 2) if total_with_sentiment > 0 else 0,
+            "average_confidence": round(avg_confidence, 3)
+        }

@@ -55,15 +55,17 @@ def search_comments(
     product_id: Optional[uuid.UUID] = Query(None),
     user_id: Optional[uuid.UUID] = Query(None),
     rating: Optional[int] = Query(None, ge=1, le=5),
+    sentiment_label: Optional[str] = Query(None, description="Filtrar por sentimiento: positive o negative"),
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=1000),
     db: Session = Depends(get_db)
 ):
-    """Buscar comentarios con filtros específicos"""
+    """Buscar comentarios con filtros específicos incluyendo sentimiento"""
     filters = CommentFilter(
         product_id=product_id,
         user_id=user_id,
-        rating=rating
+        rating=rating,
+        sentiment_label=sentiment_label
     )
     service = CommentService(db)
     return service.search_comments(filters, skip, limit)
@@ -85,6 +87,23 @@ def get_product_rating_stats(
     """Obtener estadísticas de rating de un producto"""
     service = CommentService(db)
     return service.get_product_rating_stats(product_id)
+
+@router.get("/product/{product_id}/sentiment-stats")
+def get_product_sentiment_stats(
+    product_id: uuid.UUID,
+    db: Session = Depends(get_db)
+):
+    """Obtener estadísticas de sentimiento de un producto"""
+    service = CommentService(db)
+    return service.get_product_sentiment_stats(product_id)
+
+@router.get("/sentiment-stats/global")
+def get_global_sentiment_stats(
+    db: Session = Depends(get_db)
+):
+    """Obtener estadísticas globales de sentimiento"""
+    service = CommentService(db)
+    return service.get_global_sentiment_stats()
 
 @router.put("/{comment_id}", response_model=CommentSchema)
 def update_comment(

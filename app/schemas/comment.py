@@ -17,21 +17,39 @@ class ReviewBase(BaseModel):
         return v
 
 class ReviewCreate(ReviewBase):
-    pass
+    # Campos opcionales para análisis de sentimiento
+    sentiment_score: Optional[float] = Field(None, ge=0.0, le=1.0, description="Confianza de la predicción (0-1)")
+    sentiment_label: Optional[str] = Field(None, description="Etiqueta de sentimiento: positive o negative")
+    
+    @validator('sentiment_label')
+    def validate_sentiment_label(cls, v):
+        if v is not None and v not in ['positive', 'negative']:
+            raise ValueError('La etiqueta de sentimiento debe ser positive o negative')
+        return v
 
 class ReviewUpdate(BaseModel):
     reviewer_name: Optional[str] = Field(None, description="Nombre del reseñador")
     rating: Optional[int] = Field(None, ge=1, le=5, description="Calificación de 1 a 5 estrellas")
     comment: Optional[str] = Field(None, min_length=1, max_length=2000, description="Texto del comentario")
+    sentiment_score: Optional[float] = Field(None, ge=0.0, le=1.0, description="Confianza de la predicción (0-1)")
+    sentiment_label: Optional[str] = Field(None, description="Etiqueta de sentimiento: positive o negative")
     
     @validator('rating')
     def validate_rating(cls, v):
         if v is not None and (v < 1 or v > 5):
             raise ValueError('El rating debe estar entre 1 y 5')
         return v
+    
+    @validator('sentiment_label')
+    def validate_sentiment_label(cls, v):
+        if v is not None and v not in ['positive', 'negative']:
+            raise ValueError('La etiqueta de sentimiento debe ser positive o negative')
+        return v
 
 class ReviewInDB(ReviewBase):
     id: uuid.UUID
+    sentiment_score: Optional[float] = None
+    sentiment_label: Optional[str] = None
     created_at: datetime
     
     class Config:
@@ -45,6 +63,7 @@ class ReviewFilter(BaseModel):
     product_id: Optional[uuid.UUID] = None
     user_id: Optional[uuid.UUID] = None
     rating: Optional[int] = Field(None, ge=1, le=5)
+    sentiment_label: Optional[str] = Field(None, description="Filtrar por sentimiento: positive o negative")
 
 # Mantener alias para compatibilidad
 CommentBase = ReviewBase
